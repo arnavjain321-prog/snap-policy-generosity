@@ -49,7 +49,7 @@ Derived features include:
 - `participants_per_1000`
 - `grocery_cost_index`
 - `snap_policy_class` (target variable)
-- race share features
+- `race_share_features`
 
 Final dataset: **51 rows × 24 features**.
 
