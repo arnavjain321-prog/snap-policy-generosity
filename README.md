@@ -92,17 +92,17 @@ This is a **descriptive** analysis, not causal. Results highlight patterns that 
 
 ## Repository Structure
 
-project-root/
-│
-├─ data/              
-│   └─ final_master_dataset.csv
-│
-├─ notebooks/         
-│   └─ report.ipynb
-│
-├─ report.pdf         
-├─ requirements.txt   
-└─ README.md
+**Root Directory**
+- README.md  
+- requirements.txt  
+- report.pdf  
+
+**Data**
+- data/final_master_dataset.csv  
+
+**Notebook**
+- notebooks/report.ipynb  
+
 
 
 (Visualizations are embedded directly in the notebook.)
