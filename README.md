@@ -1,138 +1,134 @@
-SNAP Policy Generosity Across U.S. States
+# Modeling SNAP Policy Generosity Across U.S. States
 
-This project analyzes differences in SNAP (Supplemental Nutrition Assistance Program) generosity across U.S. states using a combined dataset of economic, demographic, cost-of-living, and policy features. We engineer a state-level modeling dataset (51 rows) to explore how structural factors relate to SNAP participation, benefit levels, and program reach.
+This project analyzes differences in **SNAP (Supplemental Nutrition Assistance Program)** generosity across U.S. states. Using a combined dataset of economic, demographic, cost-of-living, and policy variables, we explore how structural factors relate to SNAP participation, benefit levels, and program reach.
 
-The work includes:
+The final modeling dataset includes **51 state observations** with engineered features such as:
+- benefits per person
+- SNAP participants per 1,000 residents
+- demographic composition
+- cost-of-living indicators
+- policy tiers
 
-custom data engineering from 10+ heterogeneous sources
+The notebook contains:
+- data engineering across heterogeneous sources
+- feature creation and transformation
+- multi-class classification models
+- statistical exploration of key relationships
+- a reproducible ML pipeline in Python
 
-feature creation (benefits per person, SNAP participants per 1,000 residents, policy tiers)
+---
 
-classification modeling (Low / Moderate / High generosity classes)
+## Research Question
 
-statistical exploration of patterns and correlations
+**What economic, demographic, and policy characteristics are associated with more “generous” SNAP environments across states?**
 
-a fully reproducible pipeline in Python
+To model generosity, we define a **SNAP Policy Class** based on state participation levels:
 
-Research Question
+- **Low**: < 33rd percentile  
+- **Moderate**: 33–66th percentile  
+- **High**: ≥ 66th percentile  
 
-What economic, demographic, and policy characteristics are associated with more “generous” SNAP environments across states?
+This allows comparisons across states with different populations and policy structures.
 
-We define a SNAP Policy Class using state participation levels:
+---
 
-Low: < 33rd percentile
+## Data Engineering
 
-Moderate: 33–66th percentile
+The dataset integrates the following sources:
 
-High: ≥ 66th percentile
+- **ACS 2024**: poverty rate, median household income, race shares  
+- **USDA SNAP**: benefits per state + participant counts  
+- **BLS RPP**: Food-at-Home grocery cost index  
+- **State policy indicators**: minimum wage tier (low/medium/high), trifecta control  
+- **USDA SNAP regions**  
+- **RUCC** rural-urban classifications  
 
-This allows us to compare states with similar population sizes and different policy choices.
+Derived features include:
 
-Data Engineering
+- `benefits_per_person`
+- `participants_per_1000`
+- `grocery_cost_index`
+- `snap_policy_class` (target variable)
+- race share features
 
-We construct a unified dataset using the following sources:
+Final dataset: **51 rows × 24 features**.
 
-ACS 2024: poverty rate, median household income, race shares
+---
 
-USDA SNAP: benefits + participant counts
+## Modeling Approach
 
-BLS RPP: Food-at-Home grocery cost index
+Several models are evaluated for **multi-class classification**:
 
-State policy indicators: minimum wage tier (low/medium/high), trifecta control
+- Logistic Regression  
+- k-Nearest Neighbors  
+- Random Forest  
+- Neural Network (MLP)  
+- PCA + K-Means (unsupervised)  
+- Ridge regression for benefit-level modeling  
 
-USDA SNAP regions
+All models use a **consistent pipeline** with:
 
-RUCC rural-urban classification
+- `StandardScaler` for numeric features  
+- `OneHotEncoder` for categorical features  
+- `ColumnTransformer` for reproducibility  
 
-From these we derive:
+---
 
-benefits_per_person
+## Key Findings
 
-participants_per_1000
+From exploratory analysis:
 
-grocery_cost_index
+- Higher **poverty rates** are strongly associated with higher SNAP participation per 1,000 residents.  
+- The **grocery cost index** is highly correlated with **median household income** (0.88), reflecting cost-of-living pressures.  
+- States with larger **Asian and Pacific Islander populations** show higher benefits per person; likely geographic and cost-of-living effects.  
+- **Minimum wage** is not strongly predictive; many states share the same federal baseline ($7.25).  
+- Regional patterns are clear:  
+  - **Mid-Atlantic** and **Southwest** have the highest participation  
+  - **Mountain Plains** has the lowest  
 
-snap_policy_class (target variable)
+This is a **descriptive** analysis, not causal. Results highlight patterns that may guide future applied research.
 
-Race % distributions (white, Black, Native, Asian, Pacific, 2-plus)
+---
 
-Final dataset: 51 states × 24 features.
+## Repository Structure
 
-Modeling
-
-We evaluate several methods for multi-class classification:
-
-Logistic Regression
-
-k-Nearest Neighbors
-
-Random Forest
-
-Neural Network (MLP)
-
-PCA + K-Means clustering (unsupervised)
-
-Ridge regression for benefit-level modeling
-
-All models use a consistent pipeline with:
-
-StandardScaler for numeric features
-
-OneHotEncoder for categorical features
-
-ColumnTransformer for clean reproducibility
-
-Key Findings (Summary)
-
-From exploratory data analysis:
-
-Higher poverty rates are strongly associated with higher SNAP participation per 1,000 residents.
-
-Grocery cost index correlates strongly with median household income (0.88), suggesting cost-of-living pressures.
-
-States with larger Asian and Pacific Islander populations show higher benefit levels per person, potentially reflecting geographic and cost-of-living patterns.
-
-Minimum wage is not strongly predictive at the state level because many states cluster at the federal baseline ($7.25).
-
-USDA SNAP regions show clear differences: Mid-Atlantic and Southwest have the highest participation; Mountain Plains the lowest.
-
-This project is descriptive, not causal. We highlight patterns that may inform future empirical work.
-
-Structure
-/project-root
-  ├─ data/             # raw and processed sources
-  ├─ notebooks/        # Jupyter notebook (end-to-end analysis)
-  ├─ final_master_dataset.csv
-  ├─ report.pdf
-  └─ README.md
+project-root/
+│
+├─ data/              
+│   └─ final_master_dataset.csv
+│
+├─ notebooks/         
+│   └─ report.ipynb
+│
+├─ report.pdf         
+├─ requirements.txt   
+└─ README.md
 
 
-(Not adding visuals; plots are embedded in the notebook.)
+(Visualizations are embedded directly in the notebook.)
 
-How To Reproduce
+---
 
-Clone the repo
+## How to Reproduce
 
-Install dependencies:
+```bash
+# clone the repo
+git clone https://github.com/arnavjain321-prog/snap-policy-generosity.git
+cd snap-policy-generosity
 
+# install dependencies
 pip install -r requirements.txt
 
+# run the notebook
+jupyter notebook notebooks/report.ipynb
+Acknowledgements
 
-Run the main notebook:
-
-jupyter notebook notebooks/
-
-
-The full pipeline loads raw data, builds the master dataset, runs modeling, and outputs findings.
-
-Team
+This project builds on a collaborative class project completed with:
 
 Shawn Ding
 
 Grace George
 
 Razan Habboub
-
-Arnav Jain
 
 Aeon Levy
